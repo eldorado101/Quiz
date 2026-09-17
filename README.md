@@ -1,4 +1,12 @@
-# Quiz
+   # Dwight Bedsaul
+   ### Senior WordPress Architect & Electronics Specialist
+   
+   Welcome to my GitHub! I am the founder of [ContentSocial](https://www.contentsocial.net/dwight-bedsaul/) and specialize in custom WordPress plugins, scalable web architecture, and audio engineering.
+   
+   🔗 **Connect with me:**
+   - Portfolio: [ContentSocial](https://www.contentsocial.net/dwight-bedsaul/)
+   - LinkedIn: [Dwight Bedsaul](https://www.linkedin.com/in/dwight-bedsaul-3b7a92344/)
+   - Dev.to: [@dwightbedsaul](https://dev.to/dwightbedsaul)# Quiz
  # Web Dev Trivia Quiz
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
