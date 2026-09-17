@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags: Change these to match your actual name and focus -->
+    <title>Web Dev Trivia Quiz | [Your Name]'s GitHub Portfolio</title>
+    <meta name="description" content="Test your HTML, CSS, and JavaScript knowledge with this interactive web developer trivia quiz. Created by [Your Name], a Full Stack Developer.">
+    <meta name="keywords" content="web development quiz, HTML test, JavaScript game, [Your Name] developer, frontend portfolio">
+    <meta name="author" content="[Your Name]">
+    
+    <!-- Open Graph / Social Media SEO -->
+    <meta property="og:title" content="Web Dev Trivia Quiz by [Your Name]">
+    <meta property="og:description" content="Can you score 100% on this web development quiz?">
+    <meta property="og:type" content="website">
+    
+    <style>
+        /* GitHub Dark Mode Inspired Theme */
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-green: #238636;
+            --accent-red: #da3633;
+            --accent-blue: #1f6feb;
+            --border-color: #30363d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            margin-top: 0;
+            font-size: 1.8rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--accent-blue);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent-blue);
+            background-color: rgba(31, 111, 235, 0.1);
+        }
+
+        .option-btn.correct {
+            background-color: rgba(35, 134, 54, 0.2);
+            border-color: var(--accent-green);
+            color: #3fb950;
+        }
+
+        .option-btn.wrong {
+            background-color: rgba(218, 54, 51, 0.2);
+            border-color: var(--accent-red);
+            color: #f85149;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .next-btn {
+            display: none;
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 12px;
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .next-btn:hover { opacity: 0.9; }
+
+        .results {
+            text-align: center;
+            display: none;
+        }
+
+        .results h2 { color: #ffffff; }
+        
+        .score-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+            margin: 1rem 0;
+        }
+
+        .restart-btn {
+            padding: 12px 24px;
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<main class="quiz-container">
+    <h1>🚀 Web Dev Trivia</h1>
+    
+    <div id="quiz-area">
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <h2 class="question-text" id="question">Loading question...</h2>
+        <div class="options-grid" id="options"></div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <div class="results" id="results">
+        <h2>Quiz Complete!</h2>
+        <div class="score-text" id="final-score">0/0</div>
+        <p id="result-message">Great job!</p>
+        <button class="restart-btn" onclick="restartQuiz()">Play Again</button>
+    </div>
+</main>
+
+<script>
+    // SEO Tip: The text inside these questions contains valuable keywords 
+    // like "HTML", "CSS", "JavaScript", "DOM", which helps search engines 
+    // understand what your site is about!
+    const questions = [
+        {
+            question: "Which HTML tag is used to define internal CSS?",
+            options: ["<css>", "<style>", "<script>", "<link>"],
+            answer: "<style>"
+        },
+        {
+            question: "Inside which HTML element do we put the JavaScript?",
+            options: ["<js>", "<javascript>", "<script>", "<code>"],
+            answer: "<script>"
+        },
+        {
+            question: "How do you select an element with the id 'demo' in CSS?",
+            options: [".demo", "#demo", "demo", "*demo"],
+            answer: "#demo"
+        },
+        {
+            question: "Which method returns the element with the specified ID in JavaScript?",
+            options: ["getElement()", "findElement()", "getElementById()", "queryId()"],
+            answer: "getElementById()"
+        },
+        {
+            question: "What does the 'DOM' stand for in web development?",
+            options: ["Document Object Model", "Data Object Management", "Display Object Mechanism", "Document Oriented Mapping"],
+            answer: "Document Object Model"
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+        resetState();
+        const q = questions[currentQuestion];
+        document.getElementById("question").innerText = q.question;
+        const optionsContainer = document.getElementById("options");
+        
+        q.options.forEach(option => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.classList.add("option-btn");
+            button.onclick = () => checkAnswer(button, option, q.answer);
+            optionsContainer.appendChild(button);
+        });
+
+        updateProgress();
+    }
+
+    function resetState() {
+        document.getElementById("next-btn").style.display = "none";
+        document.getElementById("options").innerHTML = "";
+    }
+
+    function checkAnswer(selectedBtn, selected, correct) {
+        const allButtons = document.querySelectorAll(".option-btn");
+        allButtons.forEach(btn => {
+            btn.disabled = true;
+            if (btn.innerText === correct) {
+                btn.classList.add("correct");
+            }
+        });
+
+        if (selected === correct) {
+            score++;
+        } else {
+            selectedBtn.classList.add("wrong");
+        }
+        
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function updateProgress() {
+        const progress = ((currentQuestion) / questions.length) * 100;
+        document.getElementById("progress").style.width = progress + "%";
+    }
+
+    function showResults() {
+        document.getElementById("quiz-area").style.display = "none";
+        document.getElementById("results").style.display = "block";
+        document.getElementById("final-score").innerText = `${score} / ${questions.length}`;
+        
+        const msg = document.getElementById("result-message");
+        if (score === questions.length) msg.innerText = "Perfect! You're a web dev ninja! 🥷";
+        else if (score >= 3) msg.innerText = "Great job! You know your stuff. 🌟";
+        else msg.innerText = "Keep learning! Check out my other repos for more. 📚";
+    }
+
+    function restartQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        document.getElementById("quiz-area").style.display = "block";
+        document.getElementById("results").style.display = "none";
+        loadQuestion();
+    }
+
+    // Initialize
+    loadQuestion();
+</script>
+</body>
+</html>
